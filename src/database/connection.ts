@@ -1,8 +1,9 @@
 import { Sequelize } from "sequelize-typescript";
 import { envConfig } from "../config/config.js";
+import User from "./models/userModel.js";
 
 const sequelize = new Sequelize(envConfig.connectionString as string, {
-  models : [__dirname + '/models']
+  models : [User]
 });
 
 const connectDB = async () => {
@@ -15,7 +16,7 @@ const connectDB = async () => {
 };
 
 sequelize.sync({force : false}).then(()=>{
-  console.log("Local change injected to db Successfullt")
+  console.log("Synced!!!")
 })
 
 connectDB();

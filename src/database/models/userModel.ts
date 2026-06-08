@@ -1,5 +1,4 @@
 import { Table,Column,Model,DataType, } from "sequelize-typescript";
-import { Col } from "sequelize/lib/utils";
 
 
 @Table({
@@ -12,7 +11,7 @@ class User extends Model{
     @Column({
         primaryKey : true,
         type : DataType.UUID,
-        defaultValue : DataType.UUID
+        defaultValue : DataType.UUIDV4
     })
     declare id:string
 
