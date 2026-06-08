@@ -14,7 +14,9 @@ const connectDB = async () => {
   }
 };
 
-
+sequelize.sync({force : false}).then(()=>{
+  console.log("Local change injected to db Successfullt")
+})
 
 connectDB();
 
