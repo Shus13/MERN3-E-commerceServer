@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import User from "../database/models/userModel.js";
 import bcrypt from 'bcrypt'
+import generateToken from "../services/generateToken.js";
 
 
 
@@ -52,13 +53,16 @@ class UserController{
                     message : "Invalid password"
                 })
             }else{
+                const token = generateToken(user.id)
                 res.status(200).json({
-                    message : "Logged in success"
+                    message : "Logged in success",
+                    token
                 })
             }
         }
         // if pass milyo then => token generate garney (jwt)
     }
+    
 }
 
 export default UserController
