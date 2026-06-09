@@ -2,6 +2,8 @@ import type { Request, Response } from "express";
 import User from "../database/models/userModel.js";
 import bcrypt from 'bcrypt'
 import generateToken from "../services/generateToken.js";
+import generateOtp from "../services/generateOtp.js";
+import sendMail from "../services/sendMail.js";
 
 
 
@@ -62,7 +64,31 @@ class UserController{
         }
         // if pass milyo then => token generate garney (jwt)
     }
-    
+    static async handleForgetPassword(req:Request, res:Response){
+        const {email} =req.body
+        if(!email){
+            return res.status(400).json({message : "Please provide email"})
+        }
+
+        const [user] = await User.findAll({
+            where : {
+                email : email
+            }
+        })
+        if(!user){
+            return res.status(400).json({message : ""})
+        }
+        // opt pathauney
+        const otp = generateOtp()
+        sendMail({
+            to : email,
+            subject : "Ecommerce site password chnage",
+            text : `You just request to change the password, Here is the otp, ${otp}`
+        })
+        res.status(200).json({
+            message : "Password reset otp sent!!!"
+        })
+    }
 }
 
 export default UserController
