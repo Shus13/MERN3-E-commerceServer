@@ -1,4 +1,5 @@
 import { Table,Column,Model,DataType, } from "sequelize-typescript";
+import { Col } from "sequelize/lib/utils";
 
 
 @Table({
@@ -35,6 +36,16 @@ class User extends Model{
         defaultValue : 'customer'
     })
     declare role:string
+
+    @Column({
+        type : DataType.STRING
+    })
+    declare otp:string
+
+    @Column({
+        type : DataType.STRING
+    })
+    declare otpGenerateTime : string
 }
 
 export default User

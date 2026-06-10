@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer'
 import { envConfig } from '../config/config.js'
-import { text } from 'express'
 
 interface IData{
     to : string,
@@ -17,7 +16,7 @@ const sendMail = async (data:IData) => {
         }
     })
     const mailOptions = {
-        from : "Ecommerce <sushitkarki@gmail.com>",
+        from : "Ecommerce <ecommercesushit@gmail.com>",
         to : data.to,
         subject : data.subject,
         text : data.text

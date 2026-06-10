@@ -1,0 +1,16 @@
+import type { Response } from "express";
+import type { setMaxListeners } from "nodemailer/lib/xoauth2/index.js";
+
+
+
+
+const sendResponse = (res:Response, statusNumber:number, message:string,data:any=[]) => {
+    res.status(statusNumber).json({
+        message,
+        data : data.length > 0 ? data :null
+    })
+}
+
+
+
+export default sendResponse

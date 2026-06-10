@@ -4,6 +4,9 @@ import bcrypt from 'bcrypt'
 import generateToken from "../services/generateToken.js";
 import generateOtp from "../services/generateOtp.js";
 import sendMail from "../services/sendMail.js";
+import findData from "../services/findData.js";
+import sendResponse from "../services/sendResponse.js";
+import checkOtpExpiration from "../services/checkOtpExpiration.js";
 
 
 
@@ -21,6 +24,12 @@ class UserController{
             username,
             email,
             password : bcrypt.hashSync(password,12)
+        })
+
+        await sendMail({
+            to : email, 
+            subject : "Registration successfull on Ecommerce Sushit", 
+            text : "Welcome to Ecommerce Sushit, Thank you for registering"
         })
 
         res.status(201).json({
@@ -67,28 +76,65 @@ class UserController{
     static async handleForgetPassword(req:Request, res:Response){
         const {email} =req.body
         if(!email){
-            return res.status(400).json({message : "Please provide email"})
+            res.status(400).json({
+                message : "Please provide email"
+            })
+            return
         }
 
-        const [user] = await User.findAll({
-            where : {
-                email : email
-            }
-        })
+        // const [user] = await User.findAll({
+        //     where : {
+        //         email : email
+        //     }
+        // })
+        const user = await findData(User,email)
         if(!user){
-            return res.status(400).json({message : ""})
+            res.status(400).json({
+                message : "Email not registered"
+            })
+            return
         }
         // opt pathauney
         const otp = generateOtp()
-        sendMail({
+        await sendMail({
             to : email,
-            subject : "Ecommerce site password chnage",
+            subject : "Ecommerce site password change",
             text : `You just request to change the password, Here is the otp, ${otp}`
         })
+        user.otp = otp.toString()
+        user.otpGenerateTime = Date.now().toString()
+        await user.save()
+
         res.status(200).json({
             message : "Password reset otp sent!!!"
         })
     }
+    static async verifyOtp(req:Request, res:Response){
+        const{otp,email} = req.body
+        if(!otp || !email){
+            sendResponse(res,400, "Please provide otp and email")
+            return
+        }
+        const user = await findData(User,email)
+        if(!user){
+            sendResponse(res,404,"Mo user with that email")
+            return
+        }
+        // otp verification
+        const [data] = await User.findAll({
+            where : {
+                otp,
+                email
+            }
+        })
+        if(!data){
+            sendResponse(res,404,"Invalid OTP")
+            return
+        }
+        const otpGenerateTime = data.otpGenerateTime
+        checkOtpExpiration(res, otpGenerateTime,120000)
+    }
+    
 }
 
 export default UserController
