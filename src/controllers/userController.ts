@@ -134,7 +134,30 @@ class UserController{
         const otpGenerateTime = data.otpGenerateTime
         checkOtpExpiration(res, otpGenerateTime,120000)
     }
-    
+    static async resetPassword(req:Request, res:Response){
+        const {newPassword,confirmPassword,email} = req.body
+        if(!newPassword || !confirmPassword || !email){
+            sendResponse(res,400,"Please provide NewPassword, ConfirmPassword,Email")
+            return
+        }
+        if(newPassword !== confirmPassword){
+            sendResponse(res,400,"NewPassword and ConfirmPassword must be same")
+            return
+        }
+        const user = await findData(User, email)
+        if(!user){
+            sendResponse(res,404,"No email with that user")
+            return
+        }
+        await sendMail({
+            to : email,
+            subject : "Ecommerce site password changed successfully",
+            text : `You have just changed the password`
+        })
+        user.password = bcrypt.hashSync(newPassword,12)
+        await user.save()
+        sendResponse(res,200,"Password reset successfully!!!")
+    }
 }
 
 export default UserController
