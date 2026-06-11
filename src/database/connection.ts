@@ -2,9 +2,10 @@ import { Sequelize } from "sequelize-typescript";
 import { envConfig } from "../config/config.js";
 import User from "./models/userModel.js";
 import Product from "./models/productModel.js";
+import Category from "./models/categoryModel.js";
 
 const sequelize = new Sequelize(envConfig.connectionString as string, {
-  models : [User, Product]
+  models : [User, Product, Category]
 });
 
 const connectDB = async () => {
