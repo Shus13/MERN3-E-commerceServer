@@ -1,9 +1,10 @@
 import { Sequelize } from "sequelize-typescript";
 import { envConfig } from "../config/config.js";
 import User from "./models/userModel.js";
+import Product from "./models/productModel.js";
 
 const sequelize = new Sequelize(envConfig.connectionString as string, {
-  models : [User]
+  models : [User, Product]
 });
 
 const connectDB = async () => {
@@ -15,7 +16,7 @@ const connectDB = async () => {
   }
 };
 
-sequelize.sync({force : false}).then(()=>{
+sequelize.sync({force : false, alter : true}).then(()=>{
   console.log("Synced!!!")
 })
 
