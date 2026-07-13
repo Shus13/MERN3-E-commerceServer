@@ -17,9 +17,12 @@ const connectDB = async () => {
   }
 };
 
-sequelize.sync({force : false, alter : true}).then(()=>{
+sequelize.sync({force : false, alter : false}).then(()=>{
   console.log("Synced!!!")
 })
+
+Product.belongsTo(Category)
+Category.hasOne(Product)
 
 connectDB();
 

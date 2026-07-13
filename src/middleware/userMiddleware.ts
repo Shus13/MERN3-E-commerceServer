@@ -49,7 +49,6 @@ class UserMiddleware{
     accessTo(...roles:Role[]){
         return(req:Request, res:Response,next:NextFunction)=>{
             let userRole = (req as IExtendedRequest).user?.role as Role
-            console.log(userRole)
             if (!roles.includes(userRole)) {
                 res.status(403).json({ 
                     message: "You do not have permission to perform this action" 
