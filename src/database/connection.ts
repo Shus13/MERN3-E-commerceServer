@@ -21,8 +21,8 @@ sequelize.sync({force : false, alter : false}).then(()=>{
   console.log("Synced!!!")
 })
 
-Product.belongsTo(Category)
-Category.hasOne(Product)
+Product.belongsTo(Category, {foreignKey:'categoryId'})
+Category.hasOne(Product, {foreignKey:'categoryId'})
 
 connectDB();
 

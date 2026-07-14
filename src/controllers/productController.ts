@@ -2,14 +2,9 @@ import type { Request, Response } from "express";
 import Product from "../database/models/productModel.js";
 import Category from "../database/models/categoryModel.js";
 
-interface ProductRequest extends Request {
-  file?: {
-    filename: string;
-  };
-}
 
 class ProductController {
-  async createProduct(req:ProductRequest, res:Response):Promise<void> {
+  async createProduct(req:Request, res:Response):Promise<void> {
     const { productName, productDescription, productPrice, productTotalStock, discount, categoryId } = req.body;
     const filename = req.file ? req.file.filename : "https://static.vecteezy.com/system/resources/previews/022/058/960/large_2x/no-image-available-icon-vector.jpg"
     
@@ -38,6 +33,7 @@ class ProductController {
       include: [
         {
           model: Category,
+          attributes : ['id', 'categoryName']
         },
       ],
     });
