@@ -3,9 +3,12 @@ import { envConfig } from "../config/config.js";
 import User from "./models/userModel.js";
 import Product from "./models/productModel.js";
 import Category from "./models/categoryModel.js";
+import Order from "./models/orderModel.js";
+import OrderDetails from "./models/orderDetails.js";
+import Payment from "./models/paymentModel.js";
 
 const sequelize = new Sequelize(envConfig.connectionString as string, {
-  models : [User, Product, Category]
+  models : [User, Product, Category, Order, OrderDetails, Payment]
 });
 
 const connectDB = async () => {
@@ -23,6 +26,8 @@ sequelize.sync({force : false, alter : false}).then(()=>{
 
 Product.belongsTo(Category, {foreignKey:'categoryId'})
 Category.hasOne(Product, {foreignKey:'categoryId'})
+
+
 
 connectDB();
 
