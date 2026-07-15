@@ -24,10 +24,20 @@ sequelize.sync({force : false, alter : false}).then(()=>{
   console.log("Synced!!!")
 })
 
-Product.belongsTo(Category, {foreignKey:'categoryId'})
 Category.hasOne(Product, {foreignKey:'categoryId'})
+Product.belongsTo(Category, {foreignKey:'categoryId'})
 
+User.hasMany(Order, {foreignKey:'userId'})
+Order.belongsTo(User, {foreignKey:'userId'})
 
+Order.hasOne(Payment, {foreignKey : 'orderId'})
+Payment.belongsTo(Order, {foreignKey : 'orderId'})
+
+Order.hasOne(OrderDetails, {foreignKey: 'orderId'})
+OrderDetails.belongsTo(Order, {foreignKey : 'orderId'})
+
+Product.hasMany(OrderDetails, {foreignKey : 'productId'})
+OrderDetails.belongsTo(Product, {foreignKey : 'productId'})
 
 connectDB();
 
