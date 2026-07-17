@@ -3,7 +3,7 @@ import { Table,Column,Model,DataType } from "sequelize-typescript";
 import { Col } from "sequelize/lib/utils";
 
 @Table({
-    tableName : "orderdetailss",
+    tableName : "orderDetails",
     modelName : "OrderDetail",
     timestamps : true
 })
