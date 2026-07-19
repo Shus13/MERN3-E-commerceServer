@@ -6,7 +6,7 @@ import { PaymentMethod } from "../globals/types/index.js";
 
 interface IProduct{
     productId : string,
-    productQty : number
+    productQty : string
 }
 
 interface OrderRequest extends Request{
@@ -16,7 +16,7 @@ interface OrderRequest extends Request{
 }
 
 class OrderController{
-    async createOrder(req:OrderRequest, res:Response){
+    async createOrder(req:OrderRequest, res:Response):Promise<void>{
         const userId = req.user?.id
         const{phoneNumber, shippingAddress, totalAmount, paymentMethod } = req.body
         const products:IProduct[] = req.body.products
@@ -45,10 +45,13 @@ class OrderController{
                 paymentMethod : paymentMethod
             })
         }else if (paymentMethod == PaymentMethod.Khalti){
-
+            // Khalti logic
         }else{
-
+            // esewa logic
         }
+        res.status(200).json({
+            message : "Order created successfully"
+        })
     }
 }
 
