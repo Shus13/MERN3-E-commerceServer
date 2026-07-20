@@ -6,9 +6,10 @@ import Category from "./models/categoryModel.js";
 import Order from "./models/orderModel.js";
 import OrderDetails from "./models/orderDetails.js";
 import Payment from "./models/paymentModel.js";
+import Cart from "./models/cartModel.js";
 
 const sequelize = new Sequelize(envConfig.connectionString as string, {
-  models : [User, Product, Category, Order, OrderDetails, Payment]
+  models : [User, Product, Category, Order, OrderDetails, Payment, Cart]
 });
 
 const connectDB = async () => {
@@ -20,7 +21,7 @@ const connectDB = async () => {
   }
 };
 
-sequelize.sync({force : false, alter : false}).then(()=>{
+sequelize.sync({force : false, alter : true}).then(()=>{
   console.log("Synced!!!")
 })
 
@@ -38,6 +39,14 @@ OrderDetails.belongsTo(Order, {foreignKey : 'orderId'})
 
 Product.hasMany(OrderDetails, {foreignKey : 'productId'})
 OrderDetails.belongsTo(Product, {foreignKey : 'productId'})
+
+// cart -> user
+Cart.belongsTo(User, {foreignKey : "userId"})
+User.hasOne(Cart, {foreignKey : "userId"})
+
+// cart -> product
+Cart.belongsTo(Product, {foreignKey : "productId"})
+Product.hasMany(Cart, {foreignKey : "productId"})
 
 connectDB();
 
